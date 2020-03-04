@@ -35,7 +35,6 @@ game = {
 	dogsCopy: dogs, 
 	round: 1,
 	score: { // get one point per right answer
-		roundScore: 0,
 		totalScore: 0,
 		currentHighScore: 0,
 		highScoreHist: [], //push all game scores here
@@ -54,20 +53,28 @@ game = {
 	},
 	multChoice: [],
 	dispPossibleAnswers() {
-		// create a radio button (label and input) for each array element - https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_label
-		$("#gameboard").append("<div id=poss-answers></div>");
-		$("#poss-answers").append()
+		// create a radio button (label and input) for each array element
 		// create a submit button
-		$
-
+		// not sure if I need labels "<label>"+multChoice[i].breedName+"</label>"
+		$("#gameboard").append("<div id=poss-answers></div>");
+		$("#poss-answers").append("<form></form>");
+		for (let i = multChoice - 1; i >= 0; i++) {
+		$("form").append("<input class=radios stype=radio name="+breed+" value="+multChoice[i].breedName+"></input>", "<br></br>");
+			}
+			$("poss-answers").append("<button>"+Submit+"</button>");
 	},
 	remPossibleAnswers() {
 		$("#poss-answers").remove();
 	},
 	makeScoreboard() {
+		// create cells - this.score.currentHighScore, this.round, this.score.totalScore
 		$("#gameboard").append("<table>Scoreboard</table");
-		// TODO
-	}
+		$("table").append("<tr></tr>, <td>HIGH SCORE</td>, <td id=high-score>"+this.score.currentHighScore+"</td>, <tr></tr>, <td>Round</td>, <td id=round>1</td>, <tr></tr>, <td>Score</td>, <td id=score>0</td>")
+	},
+	updateScoreboard() {
+		$("#round").text("<td>"+this.round+"</td>");
+		$("#score").text("<td>"+this.score.totalScore+"</td>");
+	},
 	getHighScore() {
 		// TODO
 		// sort highScoreHist to get highest score
@@ -75,8 +82,19 @@ game = {
 		// if player's total score is greater than highest score, display "game over - you beat the high score" message
 		// else if player's total score is equal to the highest core, display "game over - tied high score" message
 		// else display "game over" message
+		highScoreHist.sort 
+		if(this.score.totalScore > this.score.currentHighScore) {
+			let this.score.currentHighScore = this.score.totalScore;
+			alert("Game over! You beat the high score!")
+		} else if(this.score.totalScore === this.score.currentHighScore) {
+			alert("Game over! You tied the high score!")
+		} else alert("Game over! Keep studying your pups!")
+		}
 	},
 	answer: " ",
+	makeGameboard() {
+		$("#gameboard").append("<img id=dog-dealt src="" alt="dog photo">");
+	},
 	dealDog() {
 		// get one dog from dogsCopy at random
 		// set answer variable - let answer = dog.breed
@@ -87,8 +105,6 @@ game = {
 		dogsPlayed.push(randDog);
 		multChoice.push(randDog);
 		let answer = randDog.breed;
-		$("#gameboard").append("<img id=dog-dealt src="" alt="dog photo">") // move this to separate function so we don't recreate this each time
-
 		$("dog-dealt").attr("src", randDog.img);
 		for(let i = dogsCopy.length - 1; i >= 0; i--) {
 			if(dogsCopy[i].breed === randDog.breed) {
@@ -96,18 +112,17 @@ game = {
 			}
 		}
 	},
-	scoreRound(playerInput, answer) {
+	scoreRound(input, answer) {
 		// compare player's input to answer
 		// if score is 0, display "keep studying"
 		// if score is 1, display "good job"
 		// if player's input === answer, += 1
 		// if round equals 10, push totalScore to highScoreHist and invoke getHighScore
 		if(this.round < 10) {
-			if(playerInput === answer) {
+			if(input === answer) {
 			this.roundScore += 1;
 			this.totalScore += 1;
-			// TODO
-			// update scoreBoard table
+			this.updateScoreboard();
 			alert("Good work, you scored a point!")
 		} else {
 			alert("Keep studing your dogs. You'll get it next time.");
@@ -133,40 +148,40 @@ game = {
 		makeScoreboard();
 		dealDog();
 		getPossAnswers();
+		dispPossibleAnswers();
 	}
-	//makeDonation() {
-		// TODO - stretch goal
-		// At end of game - "Enjoying this game? Love dogs? Us too! Consider dontating: link to donation'
-	//}
 };
 
 
 player = {
 	getPlayerInput() {
-		// how do I create a variable from player's input - event listener for radio button element?
-	}
+		for (let i = 0; i < radios.length; i++) {
+			radios[i].onClick = function() {
+				let playerAnswer = radios[i].value;
+				this.submitAnswer(playerAnswer);
+			}
+		}
+	},
 	submitAnswer(input) {
 		// invokes game.scoreRound
 		// create/display next button
 		// clear multChoice - can I just reset the array?
-		game.scoreRound(playerInput, answer)
-		// TODO - create next button
+		game.scoreRound(input, answer);
+		remPossibleAnswers();
 		game.multChoice = [];
 		game.answer = " ";
-
+		this.round += 1;
 	}
 };
 
-let startBtn = document.getElementById("start");
-let submitBtn = document.getElementById("submit");
-let nextBtn = document.getElementById("next");
-let radioBtn = document.querySelector()
+let startBtn = document.getElementById("#start");
+//let submitBtn = document.getElementById("submit");
+let radios = document.getElementById(".radios");
+
 
 startBtn.addEventListener('click', playDog);
-submitBtn.addEventListener('click', submitAnswer);
-nextBtn.addEventListener('click', remPossibleAnswers);
-nextBtn.addEventListener('click', playDog); // create button
-// TODO - create event listener for radio buttons
+//submitBtn.addEventListener('click', submitAnswer);
+
 
 
 
