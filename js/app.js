@@ -23,7 +23,7 @@ dogs = [
 {breedName: 'Pembroke Welsh Corgi', img: 'https://i.imgur.com/dKWb7oVb.jpg'},
 {breedName: 'Poodle (Miniature)', img: 'https://i.imgur.com/fgLFMQwb.jpg'},
 {breedName: 'Saint Bernard', img: 'https://i.imgur.com/JPoy0xjb.jpg'},
-{breedName: 'Smooth Fox Terrier', img: 'https://i.imgur.com/kBPjWuTb.jpg'},
+{breedName: 'Cavalier King Charles Spaniel', img: 'https://i.imgur.com/kBPjWuTb.jpg'},
 {breedName: 'Standard Schnauzer', img: 'https://i.imgur.com/4ZUZqkXb.jpg'},
 {breedName: 'Vizsla', img: 'https://i.imgur.com/zvGWW8Fb.jpg'},
 {breedName: 'Whippet', img: 'https://i.imgur.com/lH0GH1Db.jpg'},
@@ -34,22 +34,32 @@ dogs = [
 game = {
 	dogsCopy: dogs, 
 	round: 1,
+	correctAnswer: " ",
 	score: { // get one point per right answer
 		totalScore: 0,
-		currentHighScore: 0,
+		currentHighScore: " ",
 		highScoreHist: [], //push all game scores here
 	},
 	dogsPlayed: [], // stretch goal - display dogsCopy.img on "gameboard"
 	allPossAnswers: ['Affenpinscher','Afghan Hound','Airedale Terrier','Akita','Alaskan Malamute','American Cocker Spaniel','American Eskimo Dog (Miniature)','American Eskimo Dog (Standard)','American Eskimo Dog (Toy)','American Foxhound','American Staffordshire Terrier','American Water Spaniel','Anatolian Shepherd','Australian Cattle Dog','Australian Shepherd','Australian Terrier','Basenji','Basset Hound','Beagle','Bearded Collie','Beauceron','Bedlington Terrier','Belgian Malinois','Belgian Sheepdog','Belgian Tervuren','Bernese Mountain Dog','Bichon Frise','Black and Tan Coonhound','Black Russian Terrier','Bloodhound','Border Collie','Border Terrier','Borzoi','Boston Terrier','Bouvier des Flandres','Boxer','Briard','Brittany','Brussels Griffon','Bull Terrier','Bulldog','Bullmastiff','Cairn Terrier','Canaan Dog','Cardigan Welsh Corgi','Cavalier King Charles Spaniel','Chesapeake Bay Retriever','Chihuahua','Chinese Crested Dog','Chinese Shar-Pei','Chow Chow','Clumber Spaniel','Collie','Curly-Coated Retriever','Dachshund (Miniature)','Dachshund (Standard)','Dalmatian','Dandie Dinmont Terrier','Doberman Pinscher','English Cocker Spaniel','English Foxhound','English Setter','English Springer Spaniel','English Toy Spaniel','Field Spaniel','Finnish Spitz','Flat-Coated Retriever','French Bulldog','German Pinscher','German Shepherd Dog','German Shorthaired Pointer','German Wirehaired Pointer','Giant Schnauzer','Glen of Imaal Terrier','Golden Retriever','Gordon Setter','Great Dane','Great Pyrenees','Greater Swiss Mountain Dog','Greyhound','Harrier','Havanese','Ibizan Hound','Irish Setter','Irish Terrier','Irish Water Spaniel','Irish Wolfhound','Italian Greyhound','Japanese Chin','Keeshond','Kerry Blue Terrier','Komondor','Kuvasz','Labrador Retriever','Lakeland Terrier','Lhasa Apso','Lowchen','Maltese','Manchester Terrier (Standard)','Manchester Terrier (Toy)','Mastiff','Miniature Bull Terrier','Miniature Pinscher','Miniature Schnauzer','Neapolitan Mastiff','Newfoundland','Norfolk Terrier','Norwegian Elkhound','Norwich Terrier','Nova Scotia Duck Tolling Retriever','Old English Sheepdog','Otterhound','Papillon','Parson Russell Terrier','Pekingese','Pembroke Welsh Corgi','Petit Basset Griffon Vendeen','Pharaoh Hound','Plott','Pointer','Polish Lowland Sheepdog','Pomeranian','Poodle (Miniature)','Poodle (Standard)','Poodle (Toy)','Portuguese Water Dog','Pug','Puli','Redbone Coonhound','Rhodesian Ridgeback','Rottweiler','Saint Bernard','Saluki (or Gazelle Hound)','Samoyed','Schipperke','Scottish Deerhound','Scottish Terrier','Sealyham Terrier','Shetland Sheepdog','Shiba Inu','Shih Tzu','Siberian Husky','Silky Terrier','Skye Terrier','Smooth Fox Terrier','Soft Coated Wheaten Terrier','Spinone Italiano','Staffordshire Bull Terrier','Standard Schnauzer','Sussex Spaniel','Tibetan Mastiff','Tibetan Spaniel','Tibetan Terrier','Toy Fox Terrier','Vizsla','Weimaraner','Welsh Springer Spaniel','Welsh Terrier','West Highland White Terrier','Whippet','Wire Fox Terrier','Wirehaired Pointing Griffon','Yorkshire Terrier'],
+	splicedPossAnswers: [],
 	getPossibleAnswers() {
 		// function to get 3 random elements from possibleAnswers
 		// add them to a new array multChoiceArr that contains the real answer
 		// reorder the new array
-		for (let i = 0; i < 3; i++) {
-			let randAnswer = allPossAnswers[Math.floor(Math.random() * allPossAnswers.length)];
-			multChoice.push(randAnswer);
-			return multChoice.sort(function(a, b) {return 0.5 - Math.random()}); // why .5?
+		for(let i = 0; i < 4; i++) {
+		let randInd = Math.floor(Math.random() * this.allPossAnswers.length)
+		let randAnswer = this.allPossAnswers[randInd];
+		if(randAnswer === this.correctAnswer) {
+			this.splicedPossAnswers.push(randAnswer)
+			this.allPossAnswers.splice(randInd, 1);
+		} else {
+			this.multChoice.push(randAnswer);
+		} if (this.multChoice.length > 4) {
+			this.multChoice.pop();
 		}
+	}	
+	this.multChoice.sort();
 	},
 	multChoice: [],
 	dispPossibleAnswers() {
@@ -57,58 +67,68 @@ game = {
 		// create a submit button
 		// not sure if I need labels "<label>"+multChoice[i].breedName+"</label>"
 		$("#gameboard").append("<div id=poss-answers></div>");
-		$("#poss-answers").append("<form></form>");
-		for (let i = multChoice - 1; i >= 0; i++) {
-		$("form").append("<input class=radios stype=radio name="+breed+" value="+multChoice[i].breedName+"></input>", "<br></br>");
+		$("#poss-answers").append("<form id=mult-choice>What's my breed?</form>");
+		for (let i = this.multChoice.length - 1; i >= 0; i--) {
+		$("form").append(`
+			<div>
+			<input id="${this.multChoice[i]}" name="breeds" value="${this.multChoice[i]}" type="radio">
+			<label for="${this.multChoice[i]}">${this.multChoice[i]}</label>
+			</div>
+		`);
 			}
-			$("poss-answers").append("<button>"+Submit+"</button>");
+			let radios = document.forms[0];
+			radios.addEventListener('click', player.getPlayerInput);
 	},
 	remPossibleAnswers() {
 		$("#poss-answers").remove();
 	},
 	makeScoreboard() {
 		// create cells - this.score.currentHighScore, this.round, this.score.totalScore
-		$("#gameboard").append("<table>Scoreboard</table");
-		$("table").append("<tr></tr>, <td>HIGH SCORE</td>, <td id=high-score>"+this.score.currentHighScore+"</td>, <tr></tr>, <td>Round</td>, <td id=round>1</td>, <tr></tr>, <td>Score</td>, <td id=score>0</td>")
+		$("#gameboard").append("<table></table");
+		$("table").append(`<tr></tr>, <td>HIGH SCORE</td>, <td id=high-score>${this.score.currentHighScore}</td>, <tr></tr>, <td>Round</td>, <td id=round>1</td>, <tr></tr>, <td>Score</td>, <td id=score>0</td>`)
 	},
 	updateScoreboard() {
-		$("#round").text("<td>"+this.round+"</td>");
-		$("#score").text("<td>"+this.score.totalScore+"</td>");
+		game.round + 1;
+		$("#round").text(`${this.round}`);
+		$("#score").text(`${this.score.totalScore}`);
 	},
 	getHighScore() {
-		// TODO
 		// sort highScoreHist to get highest score
 		// set highest score to new variable
 		// if player's total score is greater than highest score, display "game over - you beat the high score" message
 		// else if player's total score is equal to the highest core, display "game over - tied high score" message
 		// else display "game over" message
-		highScoreHist.sort 
+		this.score.highScoreHist.sort(function(a, b){return b-a});
+		this.score.currentHighScore = this.score.highScoreHist[0];
 		if(this.score.totalScore > this.score.currentHighScore) {
-			let this.score.currentHighScore = this.score.totalScore;
-			alert("Game over! You beat the high score!")
+			this.score.currentHighScore = this.score.totalScore;
+			return("Game over! You beat the high score!")
 		} else if(this.score.totalScore === this.score.currentHighScore) {
-			alert("Game over! You tied the high score!")
-		} else alert("Game over! Keep studying your pups!")
+			return("Game over! You tied the high score!");
+		} else {
+			return("Game over! Keep studying your pups!");
 		}
+		$("#next").remove();
 	},
-	answer: " ",
 	makeGameboard() {
-		$("#gameboard").append("<img id=dog-dealt src="" alt="dog photo">");
+		$("#gameboard").append("<img id='dog-dealt' src='https://placebear.com/200/200' alt='dog photo'>");
+		$("#start").remove();
 	},
 	dealDog() {
 		// get one dog from dogsCopy at random
-		// set answer variable - let answer = dog.breed
+		// set answer variable - let answer = dog.breedName
 		// push answer variable to multChoice array
 		// push played dog to dogsPlayed array
 		// remove dealt dog from dogsCopy
-		let randDog = dogsCopy[Math.floor(Math.random() * dogsCopy.length)];
-		dogsPlayed.push(randDog);
-		multChoice.push(randDog);
-		let answer = randDog.breed;
-		$("dog-dealt").attr("src", randDog.img);
-		for(let i = dogsCopy.length - 1; i >= 0; i--) {
-			if(dogsCopy[i].breed === randDog.breed) {
-				dogsCopy.splice(randDog, 1);
+		let randIndex = Math.floor(Math.random() * this.dogsCopy.length);
+		let randDog = this.dogsCopy[randIndex];
+		this.dogsPlayed.push(randDog);
+		this.multChoice.push(randDog.breedName);
+		this.correctAnswer = randDog.breedName;
+		$("#dog-dealt").attr("src", randDog.img); 
+		for(let i = this.dogsCopy.length - 1; i >= 0; i--) {
+			if(this.dogsCopy[i].breedName === randDog.breedName) {
+				this.dogsCopy.splice(randIndex, 1);
 			}
 		}
 	},
@@ -117,22 +137,20 @@ game = {
 		// if score is 0, display "keep studying"
 		// if score is 1, display "good job"
 		// if player's input === answer, += 1
-		// if round equals 10, push totalScore to highScoreHist and invoke getHighScore
-		if(this.round < 10) {
-			if(input === answer) {
-			this.roundScore += 1;
-			this.totalScore += 1;
+		// if round equals 5, push totalScore to highScoreHist and invoke getHighScore
+		if(this.round < 5) {
+			if(input === this.correctAnswer) {
+			this.score.totalScore += 100;
 			this.updateScoreboard();
-			alert("Good work, you scored a point!")
+			alert("Good work, you scored 100 points!")
 		} else {
-			alert("Keep studing your dogs. You'll get it next time.");
+			alert("Keep studing your dogs. You'll get em' next time.");
 		} 
-	} if(this.round === 10) {
-		if(playerInput === answer) {
-		this.roundScore += 1;
-		this.totalScore += 1;
-		this.highScoreHist.push(this.totalScore);
-		getHighScore();
+	} if(this.round === 5) {
+		if(input === this.correctAnswer) {
+		this.score.totalScore += 100;
+		this.score.highScoreHist.push(this.score.totalScore);
+		this.getHighScore();
 			}
 		}	
 	},
@@ -145,56 +163,49 @@ game = {
 		// give different amount of time if playing the accessible version
 	//},
 	playDog() {
-		makeScoreboard();
-		dealDog();
-		getPossAnswers();
-		dispPossibleAnswers();
+		game.makeScoreboard();
+		game.makeGameboard();
+		game.dealDog();
+		game.getPossibleAnswers();
+		game.dispPossibleAnswers();
+	},
+	resetGameboard() {
+		$("#gameboard").append("<button id=next-round>Next Round</button>")
+		let nextBtn = document.getElementById("next-round");
+		nextBtn.addEventListener('click', this.playNext);
+	},
+	playNext() {
+		game.dealDog();
+		game.getPossibleAnswers();
+		game.dispPossibleAnswers();
+		$("#next-round").remove();
 	}
 };
 
 
 player = {
-	getPlayerInput() {
-		for (let i = 0; i < radios.length; i++) {
-			radios[i].onClick = function() {
-				let playerAnswer = radios[i].value;
-				this.submitAnswer(playerAnswer);
-			}
-		}
+	getPlayerInput(event) {
+		//this.submitAnswer(playerAnswer);
+		let playerAnswer = event.target.value;
+		player.submitAnswer(playerAnswer);
 	},
 	submitAnswer(input) {
 		// invokes game.scoreRound
 		// create/display next button
 		// clear multChoice - can I just reset the array?
-		game.scoreRound(input, answer);
-		remPossibleAnswers();
+		game.scoreRound(input, game.correctAnswer);
+		game.updateScoreboard();
+		game.remPossibleAnswers();
 		game.multChoice = [];
-		game.answer = " ";
-		this.round += 1;
+		game.correctAnswer= " ";
+		game.allPossAnswers = game.allPossAnswers.concat(game.splicedPossAnswers);
+		game.resetGameboard();
 	}
 };
 
-let startBtn = document.getElementById("#start");
-//let submitBtn = document.getElementById("submit");
-let radios = document.getElementById(".radios");
+let startBtn = document.getElementById("start");
 
-
-startBtn.addEventListener('click', playDog);
-//submitBtn.addEventListener('click', submitAnswer);
-
-
-
-
-// could write a function to loop 10x
-for (let i = 0; i <= 10; i++) {
-	game.round = i;
-	// update round heading;
-	game.playDog();
-	player.getPlayerInput();
-}
-
-
-
+startBtn.addEventListener('click', game.playDog);
 
 
 
