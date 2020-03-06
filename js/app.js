@@ -37,12 +37,13 @@ game = {
 	correctAnswer: " ",
 	score: { // get one point per right answer
 		totalScore: 0,
-		currentHighScore: " ",
-		highScoreHist: [], //push all game scores here
+		//currentHighScore: " ",
+		//highScoreHist: [], //push all game scores here
 	},
 	dogsPlayed: [], // stretch goal - display dogsCopy.img on "gameboard"
 	allPossAnswers: ['Affenpinscher','Afghan Hound','Airedale Terrier','Akita','Alaskan Malamute','American Cocker Spaniel','American Eskimo Dog (Miniature)','American Eskimo Dog (Standard)','American Eskimo Dog (Toy)','American Foxhound','American Staffordshire Terrier','American Water Spaniel','Anatolian Shepherd','Australian Cattle Dog','Australian Shepherd','Australian Terrier','Basenji','Basset Hound','Beagle','Bearded Collie','Beauceron','Bedlington Terrier','Belgian Malinois','Belgian Sheepdog','Belgian Tervuren','Bernese Mountain Dog','Bichon Frise','Black and Tan Coonhound','Black Russian Terrier','Bloodhound','Border Collie','Border Terrier','Borzoi','Boston Terrier','Bouvier des Flandres','Boxer','Briard','Brittany','Brussels Griffon','Bull Terrier','Bulldog','Bullmastiff','Cairn Terrier','Canaan Dog','Cardigan Welsh Corgi','Cavalier King Charles Spaniel','Chesapeake Bay Retriever','Chihuahua','Chinese Crested Dog','Chinese Shar-Pei','Chow Chow','Clumber Spaniel','Collie','Curly-Coated Retriever','Dachshund (Miniature)','Dachshund (Standard)','Dalmatian','Dandie Dinmont Terrier','Doberman Pinscher','English Cocker Spaniel','English Foxhound','English Setter','English Springer Spaniel','English Toy Spaniel','Field Spaniel','Finnish Spitz','Flat-Coated Retriever','French Bulldog','German Pinscher','German Shepherd Dog','German Shorthaired Pointer','German Wirehaired Pointer','Giant Schnauzer','Glen of Imaal Terrier','Golden Retriever','Gordon Setter','Great Dane','Great Pyrenees','Greater Swiss Mountain Dog','Greyhound','Harrier','Havanese','Ibizan Hound','Irish Setter','Irish Terrier','Irish Water Spaniel','Irish Wolfhound','Italian Greyhound','Japanese Chin','Keeshond','Kerry Blue Terrier','Komondor','Kuvasz','Labrador Retriever','Lakeland Terrier','Lhasa Apso','Lowchen','Maltese','Manchester Terrier (Standard)','Manchester Terrier (Toy)','Mastiff','Miniature Bull Terrier','Miniature Pinscher','Miniature Schnauzer','Neapolitan Mastiff','Newfoundland','Norfolk Terrier','Norwegian Elkhound','Norwich Terrier','Nova Scotia Duck Tolling Retriever','Old English Sheepdog','Otterhound','Papillon','Parson Russell Terrier','Pekingese','Pembroke Welsh Corgi','Petit Basset Griffon Vendeen','Pharaoh Hound','Plott','Pointer','Polish Lowland Sheepdog','Pomeranian','Poodle (Miniature)','Poodle (Standard)','Poodle (Toy)','Portuguese Water Dog','Pug','Puli','Redbone Coonhound','Rhodesian Ridgeback','Rottweiler','Saint Bernard','Saluki (or Gazelle Hound)','Samoyed','Schipperke','Scottish Deerhound','Scottish Terrier','Sealyham Terrier','Shetland Sheepdog','Shiba Inu','Shih Tzu','Siberian Husky','Silky Terrier','Skye Terrier','Smooth Fox Terrier','Soft Coated Wheaten Terrier','Spinone Italiano','Staffordshire Bull Terrier','Standard Schnauzer','Sussex Spaniel','Tibetan Mastiff','Tibetan Spaniel','Tibetan Terrier','Toy Fox Terrier','Vizsla','Weimaraner','Welsh Springer Spaniel','Welsh Terrier','West Highland White Terrier','Whippet','Wire Fox Terrier','Wirehaired Pointing Griffon','Yorkshire Terrier'],
 	splicedPossAnswers: [],
+	rightAnswers: [], // breeds player got right
 	getPossibleAnswers() {
 		// function to get 3 random elements from possibleAnswers
 		// add them to a new array multChoiceArr that contains the real answer
@@ -72,7 +73,7 @@ game = {
 		$("form").append(`
 			<div>
 			<input id="${this.multChoice[i]}" name="breeds" value="${this.multChoice[i]}" type="radio">
-			<label for="${this.multChoice[i]}">${this.multChoice[i]}</label>
+			<label for="${this.multChoice[i]}" value="${this.multChoice[i]}">${this.multChoice[i]}</label>
 			</div>
 		`);
 			}
@@ -83,15 +84,18 @@ game = {
 		$("#poss-answers").remove();
 	},
 	makeScoreboard() {
-		// create cells - this.score.currentHighScore, this.round, this.score.totalScore
+		// create cells - this.round, this.score.totalScore
 		$("#gameboard").append("<table></table");
-		$("table").append(`<tr></tr>, <td>HIGH SCORE</td>, <td id=high-score>${this.score.currentHighScore}</td>, <tr></tr>, <td>Round</td>, <td id=round>1</td>, <tr></tr>, <td>Score</td>, <td id=score>0</td>`)
+		$("table").append(`</td>, <tr></tr>, <td>Round</td>, <td id=round>1</td>, <tr></tr>, <td>Score</td>, <td id=score>0</td>`)
 	},
-	updateScoreboard() {
-		game.round + 1;
-		$("#round").text(`${this.round}`);
+	updateScore() {
 		$("#score").text(`${this.score.totalScore}`);
 	},
+	updateRound() {
+		this.round += 1;
+		$("#round").text(`${this.round}`);
+	},
+	/*
 	getHighScore() {
 		// sort highScoreHist to get highest score
 		// set highest score to new variable
@@ -101,18 +105,26 @@ game = {
 		this.score.highScoreHist.sort(function(a, b){return b-a});
 		this.score.currentHighScore = this.score.highScoreHist[0];
 		if(this.score.totalScore > this.score.currentHighScore) {
+			this.score.highScoreHist.push(this.score.totalScore);
 			this.score.currentHighScore = this.score.totalScore;
-			return("Game over! You beat the high score!")
+			alert("Game over! You beat the high score!")
 		} else if(this.score.totalScore === this.score.currentHighScore) {
-			return("Game over! You tied the high score!");
+			alert("Game over! You tied the high score!");
 		} else {
-			return("Game over! Keep studying your pups!");
+			alert("Game over! Keep studying your pups!");
 		}
 		$("#next").remove();
 	},
+	*/
+	gameOver() {
+		alert(`Game over! You got these breeds on the nose (get it??): ${this.rightAnswers}. Click 'Play Again' to keep up your pup skills!`);
+		$("#gameboard").append(`<button id=play-again>Play Again</button`);
+		let againBtn = document.getElementById("play-again");
+		againBtn.addEventListener('click', this.playAgain);
+	},
 	makeGameboard() {
 		$("#gameboard").append("<img id='dog-dealt' src='https://placebear.com/200/200' alt='dog photo'>");
-		$("#start").remove();
+		$("#gameboard").append("<div id=wrapper></div>");
 	},
 	dealDog() {
 		// get one dog from dogsCopy at random
@@ -137,32 +149,32 @@ game = {
 		// if score is 0, display "keep studying"
 		// if score is 1, display "good job"
 		// if player's input === answer, += 1
-		// if round equals 5, push totalScore to highScoreHist and invoke getHighScore
+		// if round equals 5, invoke gameOver
 		if(this.round < 5) {
 			if(input === this.correctAnswer) {
-			this.score.totalScore += 100;
-			this.updateScoreboard();
-			alert("Good work, you scored 100 points!")
-		} else {
-			alert("Keep studing your dogs. You'll get em' next time.");
+				this.score.totalScore += 100;
+				this.updateScore();
+				this.rightAnswers.push(input);
+				alert("Good work, you scored 100 points!")
+			} else {
+				alert("Keep studing your dogs. You'll get em' next time.");
+			} 
 		} 
-	} if(this.round === 5) {
-		if(input === this.correctAnswer) {
-		this.score.totalScore += 100;
-		this.score.highScoreHist.push(this.score.totalScore);
-		this.getHighScore();
+		if(this.round >= 5) {
+			if(input === this.correctAnswer) {
+				this.score.totalScore += 100;
+				this.rightAnswers.push(input);
+				debugger;
+				$("#next-round").remove();
+				this.gameOver();
 			}
-		}	
+		}
 	},
-	// timeRound() {
-		// TODO - stretch goal
-		// asynchronous function setTimer
-		//setTimeout(function() {
-			//console.log('setTimeout code')
-		//}, 10000);
-		// give different amount of time if playing the accessible version
-	//},
 	playDog() {
+		$("#start").remove();
+		$("h2").remove();
+		$("h3").remove();
+		$("p").remove();
 		game.makeScoreboard();
 		game.makeGameboard();
 		game.dealDog();
@@ -170,7 +182,7 @@ game = {
 		game.dispPossibleAnswers();
 	},
 	resetGameboard() {
-		$("#gameboard").append("<button id=next-round>Next Round</button>")
+		$("#gameboard").append(`<button id=next-round>Play Next Round</button>`)
 		let nextBtn = document.getElementById("next-round");
 		nextBtn.addEventListener('click', this.playNext);
 	},
@@ -179,6 +191,21 @@ game = {
 		game.getPossibleAnswers();
 		game.dispPossibleAnswers();
 		$("#next-round").remove();
+		game.updateRound();
+	},
+	playAgain() {
+		game.round = 1;
+		game.dogsCopy = dogs;
+		game.dogsPlayed = [];
+		game.rightAnswers = [];
+		$("table").remove();
+		$("#play-again").remove();
+		$("#dog-dealt").remove();
+		game.makeScoreboard();
+		game.makeGameboard();
+		game.dealDog();
+		game.getPossibleAnswers();
+		game.dispPossibleAnswers();	
 	}
 };
 
@@ -186,26 +213,36 @@ game = {
 player = {
 	getPlayerInput(event) {
 		//this.submitAnswer(playerAnswer);
-		let playerAnswer = event.target.value;
-		player.submitAnswer(playerAnswer);
+		// if event.target has a value
+			// submit answer
+		// if not,
+			// return false
+		if(event.target !== "undefined") {
+			let playerAnswer = event.target.value || event.target.getAttribute('value');
+			player.submitAnswer(playerAnswer);
+		} else {
+			return false;
+		}
 	},
 	submitAnswer(input) {
 		// invokes game.scoreRound
 		// create/display next button
 		// clear multChoice - can I just reset the array?
 		game.scoreRound(input, game.correctAnswer);
-		game.updateScoreboard();
+		game.updateScore();
 		game.remPossibleAnswers();
 		game.multChoice = [];
 		game.correctAnswer= " ";
 		game.allPossAnswers = game.allPossAnswers.concat(game.splicedPossAnswers);
-		game.resetGameboard();
+		game.resetGameboard();	
+
 	}
 };
 
 let startBtn = document.getElementById("start");
 
 startBtn.addEventListener('click', game.playDog);
+
 
 
 
