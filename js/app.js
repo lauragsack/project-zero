@@ -86,7 +86,7 @@ game = {
 	makeScoreboard() {
 		// create cells - this.round, this.score.totalScore
 		$("#gameboard").append("<table></table");
-		$("table").append(`</td>, <tr></tr>, <td>Round: </td>, <td id=round>1</td>, <tr></tr>, <td>Score: </td>, <td id=score>0</td>`)
+		$("table").append(`<tr></tr>, <td>Round: </td>, <td id=round>1</td>, <tr></tr>, <td>Score: </td>, <td id=score>0</td>`)
 	},
 	updateScore() {
 		$("#score").text(`${this.score.totalScore}`);
@@ -167,8 +167,10 @@ game = {
 			if(input === this.correctAnswer) {
 				this.score.totalScore += 100;
 				this.rightAnswers.push(input);
+				alert("Good work, you scored 100 points!")
 				this.gameOver();
 			} else {
+				alert("Keep studing your dogs. You'll get 'em next time.");
 				this.gameOver();
 			}
 		}
