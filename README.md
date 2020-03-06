@@ -22,7 +22,7 @@ Phase 1 | Phase 2 | Phase 3 | Phase 4
 ------------ | ------------- | ------------- | -------------
 Expand on MVP (v1) | Implement the [Dog API](https://dog.ceo/dog-api/) | Add levels feature | Update scoring logic
 DRY up/refactor code | Get parity w/ v1 using API | Assign questions difficulty | Assign more points to more difficult questions
-Convert alerts to in-game modals | Add logic for additional question types (origin, demeanor, etc.) and style | Add difficulty logic and apply to rounds | Add high score logic and style
+Convert alerts to in-game modals and style | Add logic for additional question types (origin, demeanor, etc.) and style | Add difficulty logic and apply to rounds | Add high score logic and style
 
 
 ##### Resources
@@ -34,3 +34,4 @@ These resources helped make Play Dog! a reality:
 * https://stackoverflow.com/questions/16719277/checking-if-a-variable-exists-in-javascript/16719348
 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat
 * https://fonts.google.com/
+* https://api.jquery.com/
