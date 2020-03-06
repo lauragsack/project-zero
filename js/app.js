@@ -86,7 +86,7 @@ game = {
 	makeScoreboard() {
 		// create cells - this.round, this.score.totalScore
 		$("#gameboard").append("<table></table");
-		$("table").append(`</td>, <tr></tr>, <td>Round</td>, <td id=round>1</td>, <tr></tr>, <td>Score</td>, <td id=score>0</td>`)
+		$("table").append(`</td>, <tr></tr>, <td>Round: </td>, <td id=round>1</td>, <tr></tr>, <td>Score: </td>, <td id=score>0</td>`)
 	},
 	updateScore() {
 		$("#score").text(`${this.score.totalScore}`);
@@ -117,8 +117,9 @@ game = {
 	},
 	*/
 	gameOver() {
-		alert(`Game over! You got these breeds on the nose (get it??): ${this.rightAnswers}. Click 'Play Again' to keep up your pup skills!`);
-		debugger;
+		this.updateScore();
+		this.remPossibleAnswers();
+		alert(`Game over! You booped these breeds on the nose: ${this.rightAnswers}. Click 'Play Again' to keep up your pup skills!`);
 		$("#gameboard").append(`<button id=play-again>Play Again</button`);
 		let againBtn = document.getElementById("play-again");
 		againBtn.addEventListener('click', this.playAgain);
@@ -158,13 +159,16 @@ game = {
 				this.rightAnswers.push(input);
 				alert("Good work, you scored 100 points!")
 			} else {
-				alert("Keep studing your dogs. You'll get em' next time.");
+				alert("Keep studing your dogs. You'll get 'em next time.");
 			} 
 		} 
+		debugger;
 		if(this.round >= 5) {
 			if(input === this.correctAnswer) {
 				this.score.totalScore += 100;
 				this.rightAnswers.push(input);
+				this.gameOver();
+			} else {
 				this.gameOver();
 			}
 		}
@@ -180,26 +184,29 @@ game = {
 		game.getPossibleAnswers();
 		game.dispPossibleAnswers();
 	},
+	/*
 	resetGameboard() {
 		$("#gameboard").append(`<button id=next-round>Play Next Round</button>`)
 		let nextBtn = document.getElementById("next-round");
 		nextBtn.addEventListener('click', this.playNext);
 	},
+	*/
 	playNext() {
 		game.dealDog();
 		game.getPossibleAnswers();
 		game.dispPossibleAnswers();
-		$("#next-round").remove();
+		//$("#next-round").remove();
 		game.updateRound();
 	},
 	playAgain() {
 		game.round = 1;
+		game.score.totalScore = 0;
 		game.dogsCopy = dogs;
 		game.dogsPlayed = [];
 		game.rightAnswers = [];
 		$("table").remove();
-		$("#play-again").remove();
 		$("#dog-dealt").remove();
+		$("#play-again").remove();
 		game.makeScoreboard();
 		game.makeGameboard();
 		game.dealDog();
@@ -226,7 +233,6 @@ player = {
 	submitAnswer(input) {
 		// invokes game.scoreRound
 		// create/display next button
-		// clear multChoice - can I just reset the array?
 		if(game.round <= 4) {
 			game.scoreRound(input, game.correctAnswer);
 			game.updateScore();
@@ -234,15 +240,16 @@ player = {
 			game.multChoice = [];
 			game.correctAnswer = " ";
 			game.allPossAnswers = game.allPossAnswers.concat(game.splicedPossAnswers);
-			game.resetGameboard();	
-		} else if(game.round >= 5)
+			game.playNext();
+		} else {
 			game.scoreRound(input, game.correctAnswer);
 			game.updateScore();
 			game.remPossibleAnswers();
 			game.multChoice = [];
 			game.correctAnswer = " ";
 			game.allPossAnswers = game.allPossAnswers.concat(game.splicedPossAnswers);
-	}
+		}
+	} 
 };
 
 let startBtn = document.getElementById("start");
