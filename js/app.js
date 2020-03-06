@@ -118,6 +118,7 @@ game = {
 	*/
 	gameOver() {
 		alert(`Game over! You got these breeds on the nose (get it??): ${this.rightAnswers}. Click 'Play Again' to keep up your pup skills!`);
+		debugger;
 		$("#gameboard").append(`<button id=play-again>Play Again</button`);
 		let againBtn = document.getElementById("play-again");
 		againBtn.addEventListener('click', this.playAgain);
@@ -164,8 +165,6 @@ game = {
 			if(input === this.correctAnswer) {
 				this.score.totalScore += 100;
 				this.rightAnswers.push(input);
-				debugger;
-				$("#next-round").remove();
 				this.gameOver();
 			}
 		}
@@ -228,14 +227,21 @@ player = {
 		// invokes game.scoreRound
 		// create/display next button
 		// clear multChoice - can I just reset the array?
-		game.scoreRound(input, game.correctAnswer);
-		game.updateScore();
-		game.remPossibleAnswers();
-		game.multChoice = [];
-		game.correctAnswer= " ";
-		game.allPossAnswers = game.allPossAnswers.concat(game.splicedPossAnswers);
-		game.resetGameboard();	
-
+		if(game.round <= 4) {
+			game.scoreRound(input, game.correctAnswer);
+			game.updateScore();
+			game.remPossibleAnswers();
+			game.multChoice = [];
+			game.correctAnswer = " ";
+			game.allPossAnswers = game.allPossAnswers.concat(game.splicedPossAnswers);
+			game.resetGameboard();	
+		} else if(game.round >= 5)
+			game.scoreRound(input, game.correctAnswer);
+			game.updateScore();
+			game.remPossibleAnswers();
+			game.multChoice = [];
+			game.correctAnswer = " ";
+			game.allPossAnswers = game.allPossAnswers.concat(game.splicedPossAnswers);
 	}
 };
 
