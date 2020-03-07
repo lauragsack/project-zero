@@ -27,8 +27,8 @@ DRY up/refactor code | Get parity w/ v1 using API | Assign questions difficulty 
 Convert alerts to in-game modals and style | Add logic for additional question types (origin, demeanor, etc.) and style | Add difficulty logic and apply to rounds | Add high score logic and style
 
 
-##### Resources
-These resources helped make Play Dog! a reality:
+##### References
+These sources helped make Play Dog! a reality:
 
 * https://stackoverflow.com/questions/4641752/css-how-to-style-a-selected-radio-buttons-label
 * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio
