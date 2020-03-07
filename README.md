@@ -4,6 +4,8 @@
 ![dog photo](https://i.imgur.com/kpsNRiZb.jpg)
 
 ### About this game
+https://lauragsack.github.io/project-zero/
+
 As someone who likes dogs, you may want to test your dog knowledge and get even more knowledgable! Here's how to play:
 
 * The game objective is to select the breed name that corresponds to the dog in the photo.
@@ -20,7 +22,7 @@ As someone who likes dogs, you may want to test your dog knowledge and get even 
 #### Roadmap
 Phase 1 | Phase 2 | Phase 3 | Phase 4
 ------------ | ------------- | ------------- | -------------
-Expand on MVP (v1) | Implement the [Dog API](https://dog.ceo/dog-api/) | Add levels feature | Update scoring logic
+Expand on MVP (v1) | Implement the [Dog API](https://thedogapi.com/) | Add levels feature | Update scoring logic
 DRY up/refactor code | Get parity w/ v1 using API | Assign questions difficulty | Assign more points to more difficult questions
 Convert alerts to in-game modals and style | Add logic for additional question types (origin, demeanor, etc.) and style | Add difficulty logic and apply to rounds | Add high score logic and style
 
